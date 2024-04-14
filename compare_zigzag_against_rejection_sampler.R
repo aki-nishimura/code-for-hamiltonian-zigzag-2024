@@ -40,9 +40,16 @@ ref_samples <- ref_samples[within_bdry, ]
 coord_index <- sample.int(d, size = 2)
 
 make_comparison_hist <- function(
-  hzz_samples, ref_samples, coord_index, legend_loc,
+  hzz_samples, ref_samples, coord_index, legend_loc, save_to_pdf = FALSE,
   plot_range_upper_bd = 4, ylim = c(0, 0.65)
 ) {
+  if (save_to_pdf) {
+    filename <- sprintf(
+      "hamiltonian_zigzag_against_rejection_univar_marginal_comparison_along_coord_%d.pdf",
+      coord_index
+    )
+    pdf(filename, width = 6, height = 4.5)
+  }
   hzz_marg_samples <- hzz_samples[, coord_index]
   ref_marg_samples <- ref_samples[, coord_index]
   
@@ -81,6 +88,8 @@ make_comparison_hist <- function(
       cex = 1.3, fill = unlist(colors), bty = "n"
     )
   }
+  
+  if (save_to_pdf) { dev.off() }
 }
 
 make_comparison_hist(
@@ -125,7 +134,10 @@ hsl_to_rgb <- function(h, s, l, alpha) {
   }
   return(rgb(r, g, b))
 }
-make_2d_hist <- function(samples, coord_index, hue, plot_range_upper_bd=4) {
+make_2d_hist <- function(
+  samples, coord_index, hue, plot_range_upper_bd = 4,
+  save_to_pdf = FALSE, filename_prefix = NULL
+) {
   
   x <- samples[, coord_index[1]]
   y <- samples[, coord_index[2]]
@@ -153,6 +165,15 @@ make_2d_hist <- function(samples, coord_index, hue, plot_range_upper_bd=4) {
       axis.title.x = element_text(size = 17, margin = margin(t = 10))
     )
   
+  if (save_to_pdf) {
+    filename <- sprintf(
+      "2d_marginal_along_coord_%d_and_%d.pdf", coord_index[1], coord_index[2]
+    )
+    if (!is.null(filename_prefix)) {
+      filename <- paste(filename_prefix, filename, sep = "_")
+    }
+    ggsave(filename, width = 4, height = 4, units = "in")
+  }
 }
 
 make_2d_hist(hzz_samples, coord_index, hue = 210)
