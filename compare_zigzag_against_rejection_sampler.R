@@ -107,35 +107,8 @@ make_comparison_hist(
 )
 
 # Compare 2-dimensional marginals
-
-# Source: https://stackoverflow.com/questions/28562288/how-to-use-the-hsl-hue-saturation-lightness-cylindric-color-model
-hsl_to_rgb <- function(h, s, l, alpha) {
-  # h = 0 - 360 (whole input degrees)
-  # s = 0.0 - 1 (0 - 100%)
-  # l = 0.0 - 1, (0 - 100%)
-  h <- h / 360
-  r <- g <- b <- 0.0
-  if (s == 0) {
-    r <- g <- b <- l
-  } else {
-    hue_to_rgb <- function(p, q, t) {
-      if (t < 0) { t <- t + 1.0 }
-      if (t > 1) { t <- t - 1.0 }
-      if (t < 1/6) { return(p + (q - p) * 6.0 * t) }
-      if (t < 1/2) { return(q) }
-      if (t < 2/3) { return(p + ((q - p) * ((2/3) - t) * 6)) }
-      return(p)
-    }
-    q <- ifelse(l < 0.5, l * (1.0 + s), l + s - (l*s))
-    p <- 2.0 * l - q
-    r <- hue_to_rgb(p, q, h + 1/3)
-    g <- hue_to_rgb(p, q, h)
-    b <- hue_to_rgb(p, q, h - 1/3)
-  }
-  return(rgb(r, g, b))
-}
 make_2d_hist <- function(
-  samples, coord_index, hue, plot_range_upper_bd = 4,
+  samples, coord_index, color_limit = NULL, plot_range_upper_bd = 4, 
   save_to_pdf = FALSE, filename_prefix = NULL
 ) {
   
@@ -146,14 +119,10 @@ make_2d_hist <- function(
   y <- y[within_plot_range]
   data <- data.frame(x = x, y = y)
   
-  bivar_hist_plot <-
+  bivar_hist_plot <- 
     ggplot(data, aes(x = x, y = y) ) +
       geom_bin2d(bins = 40, drop = F, aes(fill = ..density..)) +
-      scale_fill_gradient(
-        low = hsl_to_rgb(hue, .9, .05), 
-        high = hsl_to_rgb(hue, .9, .7),
-        guide = "none" 
-      ) +
+      scale_fill_viridis_c(limits = color_limit) +
       labs(
         x = bquote(italic(x[.(coord_index[1])])), 
         y = bquote(italic(x[.(coord_index[2])]))
@@ -179,5 +148,6 @@ make_2d_hist <- function(
   }
 }
 
-make_2d_hist(hzz_samples, coord_index, hue = 210)
-make_2d_hist(ref_samples, coord_index, hue = 30)
+color_limit <- c(0, 0.0032)
+make_2d_hist(hzz_samples, coord_index, color_limit)
+make_2d_hist(ref_samples, coord_index, color_limit)
