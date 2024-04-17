@@ -146,24 +146,25 @@ make_2d_hist <- function(
   y <- y[within_plot_range]
   data <- data.frame(x = x, y = y)
   
-  ggplot(data, aes(x = x, y = y) ) +
-    geom_bin2d(bins = 40, drop = F, aes(fill = ..density..)) +
-    scale_fill_gradient(
-      low = hsl_to_rgb(hue, .9, .05), 
-      high = hsl_to_rgb(hue, .9, .7),
-      guide = "none" 
-    ) +
-    labs(
-      x = bquote(italic(x[.(coord_index[1])])), 
-      y = bquote(italic(x[.(coord_index[2])]))
-    ) +
-    theme_minimal() +
-    theme(
-      aspect.ratio = 1,
-      axis.text = element_text(size = 13),
-      axis.title.y = element_text(size = 17, margin = margin(r = 10)),
-      axis.title.x = element_text(size = 17, margin = margin(t = 10))
-    )
+  bivar_hist_plot <-
+    ggplot(data, aes(x = x, y = y) ) +
+      geom_bin2d(bins = 40, drop = F, aes(fill = ..density..)) +
+      scale_fill_gradient(
+        low = hsl_to_rgb(hue, .9, .05), 
+        high = hsl_to_rgb(hue, .9, .7),
+        guide = "none" 
+      ) +
+      labs(
+        x = bquote(italic(x[.(coord_index[1])])), 
+        y = bquote(italic(x[.(coord_index[2])]))
+      ) +
+      theme_minimal() +
+      theme(
+        aspect.ratio = 1,
+        axis.text = element_text(size = 13),
+        axis.title.y = element_text(size = 17, margin = margin(r = 10)),
+        axis.title.x = element_text(size = 17, margin = margin(t = 10))
+      )
   
   if (save_to_pdf) {
     filename <- sprintf(
@@ -173,6 +174,8 @@ make_2d_hist <- function(
       filename <- paste(filename_prefix, filename, sep = "_")
     }
     ggsave(filename, width = 4, height = 4, units = "in")
+  } else {
+    bivar_hist_plot
   }
 }
 
