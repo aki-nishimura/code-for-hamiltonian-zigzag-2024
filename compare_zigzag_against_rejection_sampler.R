@@ -108,8 +108,8 @@ make_comparison_hist(
 
 # Compare 2-dimensional marginals
 make_2d_hist <- function(
-  samples, coord_index, color_limit = NULL, plot_range_upper_bd = 4, 
-  save_to_pdf = FALSE, filename_prefix = NULL
+  samples, coord_index, color_limit = NULL, title = NULL, 
+  plot_range_upper_bd = 4, save_to_pdf = FALSE, filename_prefix = NULL
 ) {
   
   x <- samples[, coord_index[1]]
@@ -125,14 +125,16 @@ make_2d_hist <- function(
       scale_fill_viridis_c(limits = color_limit) +
       labs(
         x = bquote(italic(x[.(coord_index[1])])), 
-        y = bquote(italic(x[.(coord_index[2])]))
+        y = bquote(italic(x[.(coord_index[2])])),
+        title = title
       ) +
       theme_minimal() +
       theme(
         aspect.ratio = 1,
         axis.text = element_text(size = 13),
         axis.title.y = element_text(size = 17, margin = margin(r = 10)),
-        axis.title.x = element_text(size = 17, margin = margin(t = 10))
+        axis.title.x = element_text(size = 17, margin = margin(t = 10)),
+        plot.title = element_text(size = 18, hjust = 0.5, vjust = 1)
       )
   
   if (save_to_pdf) {
@@ -149,5 +151,5 @@ make_2d_hist <- function(
 }
 
 color_limit <- c(0, 0.0032)
-make_2d_hist(hzz_samples, coord_index, color_limit)
-make_2d_hist(ref_samples, coord_index, color_limit)
+make_2d_hist(hzz_samples, coord_index, color_limit, title = "Zigzag HMC")
+make_2d_hist(ref_samples, coord_index, color_limit, title = "Reference (rejection sampler)")
