@@ -153,3 +153,76 @@ make_2d_hist <- function(
 color_limit <- c(0, 0.0032)
 make_2d_hist(hzz_samples, coord_index, color_limit, title = "Zigzag HMC")
 make_2d_hist(ref_samples, coord_index, color_limit, title = "Reference (rejection sampler)")
+
+
+# Compare estimates of mean and covariance
+make_est_comparison_plot <- function(
+    hzz_est, ref_est, title, axis_tick = list(at = NULL, labels = TRUE), ...) {
+  
+  plot(
+    hzz_est, ref_est,
+    xlab = "Zigzag HMC",
+    ylab = "Reference",
+    main = title,
+    font.main = 1,
+    frame = FALSE, # Remove the ugly box
+    col = "#002D72",
+    cex = 1.2,
+    lwd = 1.2,
+    cex.lab = 1.2, 
+    cex.main = 1.3,
+    xaxt = "n", 
+    yaxt = "n",
+    ...
+  )
+  
+  abline(
+    a = 0, b = 1, 
+    col = "#68ACE5", 
+    lty="dashed", 
+    lwd = 1.4
+  )
+  
+  for (axis_index in c(1, 2)) {
+    axis(
+      axis_index, 
+      at = axis_tick$at, 
+      labels = axis_tick$labels,
+      cex.lab = 1.2, 
+      cex.axis = 1.2
+    ) # Custom axis ticks
+  }
+  
+}
+
+extract_lower_part <- function(matrix) {
+  return(as.vector(matrix[lower.tri(matrix)]))
+}
+
+par(pty="s")
+
+hzz_mean <- colMeans(hzz_samples)
+ref_mean <- colMeans(ref_samples)
+
+make_est_comparison_plot(
+  hzz_mean, ref_mean,
+  "Mean estimates",
+  axis_tick = list(
+    at = seq(1, 1.7, by = .1),
+    labels = c(1, "", 1.2, "", 1.4, "", 1.6, "")
+  ),
+  xlim = c(1, 1.7), ylim = c(1, 1.7)
+)
+
+hzz_cov <- extract_lower_part(cov(hzz_samples))
+ref_cov <- extract_lower_part(cov(ref_samples))
+
+make_est_comparison_plot(
+  hzz_cov, ref_cov,
+  "Covariance estimates",
+  axis_tick = list(
+    at = c(-0.05, 0, .05, .1, .15, .2, .25, .3),
+    labels = c("", 0, "", .1, "", .2, "", .3)
+  ),
+  xlim = c(-.05, .3), ylim = c(-.05, .3),
+)
