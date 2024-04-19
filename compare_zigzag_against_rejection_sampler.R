@@ -6,8 +6,8 @@ set.seed(1918)
 
 # Define a truncated Gaussian target
 d <- 16
-mode <- rep(.25, d) + .1 * rnorm(d) 
-Sigma_mean <- diag(.5, d) + .5
+mode <- rep(.2, d) + .1 * rnorm(d) 
+Sigma_mean <- diag(.1, d) + .9
 df <- 2 * d
 Sigma <- drop(rWishart(1, df, Sigma_mean / df))
 Prec <- solve(Sigma)
@@ -150,9 +150,7 @@ make_2d_hist <- function(
   }
 }
 
-color_limit <- c(0, 0.0032)
-make_2d_hist(hzz_samples, coord_index, color_limit, title = "Zigzag HMC")
-make_2d_hist(ref_samples, coord_index, color_limit, title = "Reference (rejection sampler)")
+color_limit <- c(0, 0.0066)
 
 
 # Compare estimates of mean and covariance
@@ -208,10 +206,10 @@ make_est_comparison_plot(
   hzz_mean, ref_mean,
   "Mean estimates",
   axis_tick = list(
-    at = seq(1, 1.7, by = .1),
-    labels = c(1, "", 1.2, "", 1.4, "", 1.6, "")
+    at = seq(1, 1.4, by = .1),
+    labels = seq(1, 1.4, by = .1)
   ),
-  xlim = c(1, 1.7), ylim = c(1, 1.7)
+  xlim = c(1, 1.4), ylim = c(1, 1.4)
 )
 
 hzz_cov <- extract_lower_part(cov(hzz_samples))
@@ -221,8 +219,8 @@ make_est_comparison_plot(
   hzz_cov, ref_cov,
   "Covariance estimates",
   axis_tick = list(
-    at = c(-0.05, 0, .05, .1, .15, .2, .25, .3),
-    labels = c("", 0, "", .1, "", .2, "", .3)
+    at = seq(.21, .37, by = .04),
+    labels = seq(.21, .37, by = .04)
   ),
-  xlim = c(-.05, .3), ylim = c(-.05, .3),
+  xlim = c(.205, .37), ylim = c(.205, .37),
 )
