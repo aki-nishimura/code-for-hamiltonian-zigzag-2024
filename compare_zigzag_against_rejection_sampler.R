@@ -151,6 +151,8 @@ make_2d_hist <- function(
 }
 
 color_limit <- c(0, 0.0066)
+make_2d_hist(hzz_samples, coord_index, color_limit, title = "Zigzag HMC")
+make_2d_hist(ref_samples, coord_index, color_limit, title = "Reference")
 
 
 # Compare estimates of mean and covariance
