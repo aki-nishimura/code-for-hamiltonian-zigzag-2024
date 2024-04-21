@@ -50,7 +50,7 @@ which generate a text file `HZZ_cs_rho0.9_d256_ss0.707_samples.log` which contai
 
 ## Reproducing supplemental numerical results using hdtg
 
-The `supplement` folder provides R scripts to reproduce the numerical results in Supplement Section S7, S11, and S12.
+The `supplement` folder provides R scripts to reproduce the numerical results in Supplement Section S6, S7, S11, and S12.
 These scripts use a Hamiltonian and Markovian zigzag implementations in the R package [hdtg](https://github.com/suchard-group/hdtg).
 You can install the package from an R session via
 
@@ -63,6 +63,8 @@ The results for Section S7 and S12 also require the parameters of the phylogenet
 These are provided by the files `precision_matrix.csv`, `orthant_indicator.txt`, and `mean.txt` available on Zenodo at http://doi.org/10.5281/zenodo.4679720.
 Place these files under the `supplement/data` folder within this Git repo.
 The folder also contains `marginal_variances.txt` and `principal_component.txt`, precomputed from the precision matrix to save time and used by the simulation scripts.
+
+The results of Section S6 can be reproduced by running the script `supplement/compare_zigzag_against_rejection_sampler.R`.
 
 To reproduce the results of Section S7 ("Comparison of zigzag HMC/NUTS with existing samplers"), run 
 ```
