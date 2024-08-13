@@ -6,7 +6,7 @@ This repository contains instruction and scripts to reproduce the results in the
 
 ## Setting up BEAST
 
-The simulation results of Section 4 uses the implementation of Hamiltonian zigzag in the [BEAST](https://beast.community/) software package. 
+The simulation results of Section 4 uses the implementation of Hamiltonian and Markovian zigzag in the [BEAST](https://beast.community/) software package. 
 On Unix systems, you can use the commands below to install BEAST.
 The `ant` command requires Apache Ant, which should be available through a package manger such as Homebrew on macOS.
 
@@ -46,6 +46,7 @@ java -jar ~/beast-mcmc/build/dist/beast.jar -seed 111 ~/code-for-hamiltonian-zig
 ```
 
 which generate a text file `HZZ_cs_rho0.9_d256_ss0.707_samples.log` which contains corresponding zigzag HMC samples.
+You can run Markovian zigzag in similar manners by inputting the XML files prefixed by `MZZ`.
 
 
 ## Reproducing supplemental numerical results using hdtg
